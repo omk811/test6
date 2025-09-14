@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الكلمات المعربة والمبنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            font-family: 'Cairo', sans-serif;
+        }
+        .dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .dropdown-content.show {
+            max-height: 300px;
+        }
+        .option-button {
+            transition: all 0.2s ease;
+        }
+        .option-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .correct {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .incorrect {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-8">
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">اختبار الكلمات المعربة والمبنية</h1>
+                <p class="text-gray-600 mb-4">للصف الخامس الأساسي</p>
+                <p class="text-lg font-semibold text-blue-600">الأستاذ خليل البلوشي</p>
+            </div>
+            
+            <div class="flex justify-center gap-4 mb-4">
+                <a href="https://omk811.blogspot.com/2025/09/blog-post_13.html" target="_blank" 
+                   class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                    الرابط الأساسي للموضوع
+                </a>
+                <a href="https://whatsapp.com/channel/0029VamotBKCxoAy3fzUcv3T" target="_blank" 
+                   class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors">
+                    قناة الواتساب
+                </a>
+            </div>
+            
+            <div class="text-center">
+                <div class="bg-gray-100 rounded-lg p-4 inline-block">
+                    <span class="text-lg font-semibold">النتيجة: </span>
+                    <span id="score" class="text-2xl font-bold text-blue-600">0/10</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions -->
+        <div id="questionsContainer">
+            <!-- Questions will be generated here -->
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="hidden bg-white rounded-2xl shadow-xl p-8 text-center">
+            <h2 class="text-3xl font-bold mb-4">انتهى الاختبار!</h2>
+            <div class="text-6xl font-bold mb-4" id="finalScore">0/10</div>
+            <div class="text-xl mb-6" id="percentage">0%</div>
+            <button onclick="restartQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-lg font-semibold">
+                إعادة الاختبار
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "أي من هذه الكلمات تتغير حركة آخرها حسب موقعها في الجملة؟",
+                options: [
+                    "هذا",
+                    "كلا",
+                    "الكتاب"
+                ],
+                correct: 2
+            },
+            {
+                question: "كلمة \"أمس\" في جملة \"أمس ذهبت إلى المدرسة\":",
+                options: [
+                    "كلمة معربة",
+                    "كلمة مبنية",
+                    "فعل معرب"
+                ],
+                correct: 1
+            },
+            {
+                question: "في جملة \"الولدُ مجتهد\" و\"رأيت الولدَ\"، كلمة \"الولد\":",
+                options: [
+                    "تغيرت حركة آخرها",
+                    "بنيت على حركة واحدة",
+                    "فعل مبني"
+                ],
+                correct: 0
+            },
+            {
+                question: "أي من هذه الكلمات مبنية؟",
+                options: [
+                    "طالب",
+                    "هذا",
+                    "كتاب"
+                ],
+                correct: 1
+            },
+            {
+                question: "في جملة \"يلعب الأطفال في الحديقة\" كلمة \"يلعب\" هي:",
+                options: [
+                    "فعل معرب",
+                    "فعل مبني",
+                    "اسم مبني"
+                ],
+                correct: 0
+            },
+            {
+                question: "كلمة \"الذي\" في جملة \"الطالب الذي نجح\":",
+                options: [
+                    "كلمة معربة",
+                    "كلمة مبنية",
+                    "فعل مبني"
+                ],
+                correct: 1
+            },
+            {
+                question: "أي من هذه الجمل فيها مبتدأ وخبر معربان؟",
+                options: [
+                    "هذا كتابي",
+                    "الطالبُ مجتهد",
+                    "أمس كان جميلاً"
+                ],
+                correct: 1
+            },
+            {
+                question: "لماذا نقول أن كلمة \"هنا\" مبنية؟",
+                options: [
+                    "لأن حركة آخرها لا تتغير",
+                    "لأنها فعل",
+                    "لأنها اسم معرب"
+                ],
+                correct: 0
+            },
+            {
+                question: "في جملة \"كتب أحمد الواجب\"، كم كلمة معربة يوجد؟",
+                options: [
+                    "كلمتان",
+                    "كلمة واحدة",
+                    "ثلاث كلمات"
+                ],
+                correct: 0
+            },
+            {
+                question: "الفرق بين الكلمة المعربة والمبنية هو:",
+                options: [
+                    "المعربة تتغير حركة آخرها والمبنية لا تتغير",
+                    "المعربة فعل والمبنية اسم",
+                    "المعربة جملة والمبنية كلمة"
+                ],
+                correct: 0
+            }
+        ];
+
+        let currentAnswers = new Array(questions.length).fill(null);
+        let score = 0;
+
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'bg-white rounded-2xl shadow-xl p-6 mb-6';
+                questionDiv.innerHTML = `
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">السؤال ${index + 1}</h3>
+                    <p class="text-lg mb-4 text-gray-700 leading-relaxed">${q.question}</p>
+                    <div class="relative">
+                        <button onclick="toggleDropdown(${index})" 
+                                class="w-full bg-gray-50 border-2 border-gray-200 rounded-lg p-4 text-right flex justify-between items-center hover:border-blue-300 transition-colors">
+                            <span id="selected-${index}" class="text-gray-500">اختر الإجابة الصحيحة</span>
+                            <svg class="w-5 h-5 transform transition-transform" id="arrow-${index}">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div id="dropdown-${index}" class="dropdown-content absolute w-full bg-white border-2 border-gray-200 rounded-lg mt-1 z-10">
+                            ${q.options.map((option, optIndex) => `
+                                <button onclick="selectAnswer(${index}, ${optIndex})" 
+                                        class="option-button w-full p-4 text-right hover:bg-blue-50 border-b border-gray-100 last:border-b-0 transition-colors">
+                                    ${String.fromCharCode(65 + optIndex)}) ${option}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+
+            // Add submit button
+            const submitDiv = document.createElement('div');
+            submitDiv.className = 'text-center mt-8';
+            submitDiv.innerHTML = `
+                <button onclick="submitQuiz()" 
+                        class="bg-green-600 hover:bg-green-700 text-white px-12 py-4 rounded-xl text-xl font-bold shadow-lg transform hover:scale-105 transition-all">
+                    تسليم الاختبار
+                </button>
+            `;
+            container.appendChild(submitDiv);
+        }
+
+        function toggleDropdown(questionIndex) {
+            const dropdown = document.getElementById(`dropdown-${questionIndex}`);
+            const arrow = document.getElementById(`arrow-${questionIndex}`);
+            
+            // Close all other dropdowns
+            for (let i = 0; i < questions.length; i++) {
+                if (i !== questionIndex) {
+                    const otherDropdown = document.getElementById(`dropdown-${i}`);
+                    const otherArrow = document.getElementById(`arrow-${i}`);
+                    otherDropdown.classList.remove('show');
+                    otherArrow.style.transform = 'rotate(0deg)';
+                }
+            }
+            
+            dropdown.classList.toggle('show');
+            arrow.style.transform = dropdown.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        function selectAnswer(questionIndex, optionIndex) {
+            currentAnswers[questionIndex] = optionIndex;
+            const selectedSpan = document.getElementById(`selected-${questionIndex}`);
+            const dropdown = document.getElementById(`dropdown-${questionIndex}`);
+            const arrow = document.getElementById(`arrow-${questionIndex}`);
+            
+            selectedSpan.textContent = `${String.fromCharCode(65 + optionIndex)}) ${questions[questionIndex].options[optionIndex]}`;
+            selectedSpan.className = 'text-blue-600 font-semibold';
+            
+            dropdown.classList.remove('show');
+            arrow.style.transform = 'rotate(0deg)';
+            
+            updateScore();
+        }
+
+        function updateScore() {
+            score = 0;
+            currentAnswers.forEach((answer, index) => {
+                if (answer === questions[index].correct) {
+                    score++;
+                }
+            });
+            document.getElementById('score').textContent = `${score}/10`;
+        }
+
+        function submitQuiz() {
+            // Check if all questions are answered
+            if (currentAnswers.includes(null)) {
+                alert('يرجى الإجابة على جميع الأسئلة قبل التسليم');
+                return;
+            }
+
+            // Show results for each question
+            questions.forEach((q, index) => {
+                const options = document.querySelectorAll(`#dropdown-${index} button`);
+                options.forEach((option, optIndex) => {
+                    if (optIndex === q.correct) {
+                        option.classList.add('correct');
+                    } else if (optIndex === currentAnswers[index] && optIndex !== q.correct) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                // Disable dropdown
+                document.querySelector(`button[onclick="toggleDropdown(${index})"]`).disabled = true;
+                document.querySelector(`button[onclick="toggleDropdown(${index})"]`).classList.add('opacity-50');
+            });
+
+            // Show final results
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = `${score}/10`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            
+            let message = '';
+            if (percentage >= 90) message = 'ممتاز! 🌟';
+            else if (percentage >= 80) message = 'جيد جداً! 👏';
+            else if (percentage >= 70) message = 'جيد! 👍';
+            else if (percentage >= 60) message = 'مقبول 📚';
+            else message = 'يحتاج إلى مراجعة 📖';
+            
+            document.getElementById('percentage').textContent = `${percentage}% - ${message}`;
+            
+            // Hide questions and show results
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        function restartQuiz() {
+            currentAnswers = new Array(questions.length).fill(null);
+            score = 0;
+            document.getElementById('score').textContent = '0/10';
+            document.getElementById('questionsContainer').style.display = 'block';
+            document.getElementById('results').classList.add('hidden');
+            generateQuestions();
+        }
+
+        // Initialize quiz
+        generateQuestions();
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.relative')) {
+                for (let i = 0; i < questions.length; i++) {
+                    const dropdown = document.getElementById(`dropdown-${i}`);
+                    const arrow = document.getElementById(`arrow-${i}`);
+                    if (dropdown) {
+                        dropdown.classList.remove('show');
+                        arrow.style.transform = 'rotate(0deg)';
+                    }
+                }
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f237c146dcf9f0',t:'MTc1Nzg3NzM3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
